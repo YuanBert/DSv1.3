@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * File Name          : main.hpp
-  * Description        : This file contains the common defines of the application
+  * File Name          : DS_Protocol.h
+  * Description        : DS_Protocol.h file
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -45,74 +45,52 @@
   *
   ******************************************************************************
   */
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+  /* Define to prevent recursive inclusion -------------------------------------*/
+  #ifndef __DS_PROTOCOL_H
+  #define __DS_PROTOCOL_H
+  #ifdef __cplusplus
+   extern "C" {
+  #endif
   /* Includes ------------------------------------------------------------------*/
-
-/* Includes ------------------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-#include "stdint.h"
-/* USER CODE END Includes */
-
-/* Private define ------------------------------------------------------------*/
-
-#define CommunicationLED_Pin GPIO_PIN_13
-#define CommunicationLED_GPIO_Port GPIOC
-#define CTR485_EN_Pin GPIO_PIN_1
-#define CTR485_EN_GPIO_Port GPIOC
-#define MCU_KEY_IN_Pin GPIO_PIN_1
-#define MCU_KEY_IN_GPIO_Port GPIOA
-#define MCU_KEY_IN_EXTI_IRQn EXTI1_IRQn
-#define BSP_TX_Pin GPIO_PIN_2
-#define BSP_TX_GPIO_Port GPIOA
-#define BSP_RX_Pin GPIO_PIN_3
-#define BSP_RX_GPIO_Port GPIOA
-#define MCUAtmosphereLED1_Pin GPIO_PIN_5
-#define MCUAtmosphereLED1_GPIO_Port GPIOA
-#define MCUAtmosphereLED2_Pin GPIO_PIN_6
-#define MCUAtmosphereLED2_GPIO_Port GPIOA
-#define GentleSensor_Pin GPIO_PIN_4
-#define GentleSensor_GPIO_Port GPIOC
-#define CortexA9_TX_Pin GPIO_PIN_9
-#define CortexA9_TX_GPIO_Port GPIOA
-#define CortexA9_RX_Pin GPIO_PIN_10
-#define CortexA9_RX_GPIO_Port GPIOA
-#define MCU_LED_OUT_Pin GPIO_PIN_5
-#define MCU_LED_OUT_GPIO_Port GPIOB
-#define MCU_LED_OUTB6_Pin GPIO_PIN_6
-#define MCU_LED_OUTB6_GPIO_Port GPIOB
-#define RunningLED_Pin GPIO_PIN_9
-#define RunningLED_GPIO_Port GPIOB
-
-/* ########################## Assert Selection ############################## */
-/**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
-  *        HAL drivers code
+  #include "main.h"
+  #include "usart.h"
+  #include "stm32f1xx_hal.h"  
+  
+  /*******************************************************************************
+  ** struct: sProtocolCmd
+  **
+  ** DESCRIPTION:
+  **  -- new ProtocolCmd 
+  **
+  ** CREATED: 2017/12/7, by Bert
+  **
+  ** FILE: DS_Protocol.h
+  **
+  ** AUTHOR: Bert.Zhang
+  *****************************************************************************
   */
-/* #define USE_FULL_ASSERT    1U */
+  struct sProtocolCmd
+  {
+    uint8_t     CmdType;
+    uint8_t     CmdParam;
+    uint8_t     DataLengthLow;
+    uint8_t     DataLengthHight;
+    uint8_t     DataCRC8;
+    uint8_t*    pDataBuffer;
+    
+    uint8_t     HandingFlag;
+    uint8_t     AckCmdCode;
+    uint8_t     AckCode;
+    
+    uint8_t     RevRequestFlag;
+    uint8_t     RevEchoFlag;
+    uint8_t     SendTimesCnt;
+  };
+  
+  
+  #ifdef __cplusplus
+  }
+  #endif
+  #endif
+  /***************************************************************END OF FILE****/
 
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
-
-#ifdef __cplusplus
- extern "C" {
-#endif
-void _Error_Handler(char *, int);
-
-#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-#ifdef __cplusplus
-}
-#endif
-
-/**
-  * @}
-  */ 
-
-/**
-  * @}
-*/ 
-
-#endif /* __MAIN_H */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

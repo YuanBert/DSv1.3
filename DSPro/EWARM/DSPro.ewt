@@ -1199,6 +1199,12 @@
                 <name>$PROJ_DIR$\..\Src\dma.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Src\DS_Protocol.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Src\GentleSensor.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Src\gpio.c</name>
             </file>
             <file>

@@ -56,14 +56,14 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "GentleSensor.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+GPIOSTATUSDETECTION gGentleSensorStatusDetection;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,6 +115,10 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim4);
+  HAL_TIM_Base_Start_IT(&htim5);
+  
+  
 
   /* USER CODE END 2 */
 
@@ -224,7 +228,50 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  Period elapsed callback in non blocking mode 
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
+  /* NOTE : This function Should not be modified, when the callback is needed,
+            the __HAL_TIM_PeriodElapsedCallback could be implemented in the user file
+   */
+  if(htim->Instance == htim4.Instance)
+  {
+    
+  }
+  
+  if(htim->Instance == htim5.Instance)
+  {
+      gGentleSensorStatusDetection.GpioCurrentReadVal = HAL_GPIO_ReadPin(GentleSensor_GPIO_Port,GentleSensor_Pin);
+      
+      if(0 == gGentleSensorStatusDetection.GpioCurrentReadVal && 0 == gGentleSensorStatusDetection.GpioLastReadVal)
+      {
+        if(0 == gGentleSensorStatusDetection.GpioCarFlag)
+        {
+          gGentleSensorStatusDetection.GpioFilterCnt ++;
+          if(gGentleSensorStatusDetection.GpioFilterCnt > 5 && 0 == gGentleSensorStatusDetection.GpioStatusVal)
+          {
+            gGentleSensorStatusDetection.GpioStatusVal = 1;
+            gGentleSensorStatusDetection.GpioFilterCnt = 0;
+            gGentleSensorStatusDetection.GpioCarFlag = 1;
+          }
+        }
+      }
+      else
+      {
+        gGentleSensorStatusDetection.GpioCarFlag = 0;
+        gGentleSensorStatusDetection.GpioFilterCnt = 0;
+        gGentleSensorStatusDetection.GpioStatusVal = 0;
+      }     
+      gGentleSensorStatusDetection.GpioLastReadVal = gGentleSensorStatusDetection.GpioCurrentReadVal;
+  }
 
+}
 /* USER CODE END 4 */
 
 /**
