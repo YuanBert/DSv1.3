@@ -68,6 +68,10 @@
 #define BSP_TX_GPIO_Port GPIOA
 #define BSP_RX_Pin GPIO_PIN_3
 #define BSP_RX_GPIO_Port GPIOA
+#define MCUAtmosphereLED1_Pin GPIO_PIN_5
+#define MCUAtmosphereLED1_GPIO_Port GPIOA
+#define MCUAtmosphereLED2_Pin GPIO_PIN_6
+#define MCUAtmosphereLED2_GPIO_Port GPIOA
 #define GentleSensor_Pin GPIO_PIN_4
 #define GentleSensor_GPIO_Port GPIOC
 #define CortexA9_TX_Pin GPIO_PIN_9

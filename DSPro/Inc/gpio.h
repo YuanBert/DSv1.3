@@ -63,6 +63,28 @@
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
+	 void BSP_RUNNINGLED_ON(void);
+	 void BSP_RUNNINGLED_OFF(void);
+	 void BSP_RUNNINGLED_TORGGLE(void);
+	 
+	 void BSP_COMMUNICATIONLED_ON(void);
+	 void BSP_COMMUNICATIONLED_OFF(void);
+	 void BSP_COMMUNICATIONLED_TORGGLE(void);
+	 
+	 void BSP_ATMOSPHERELED1_ON(void);
+	 void BSP_ATMOSPHERELED1_OFF(void);
+	 void BSP_ATMOSPHERELED1_TOGGLE(void);
+	 
+	 void BSP_ATMOSPHERELED2_ON(void);
+	 void BSP_ATMOSPHERELED2_OFF(void);
+	 void BSP_ATMOSPHERELED2_TOGGLE(void);
+	 
+	 
+	 void BSP_LED_OUT_OFF(void);
+	 void BSP_LED_OUT_ON(void);
+	 
+	 void BSP_FAN_OUT_OFF(void);
+	 void BSP_FAN_OUT_ON(void);   
 
 /* USER CODE END Private defines */
 

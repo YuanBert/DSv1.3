@@ -82,6 +82,9 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, CommunicationLED_Pin|CTR485_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, MCUAtmosphereLED1_Pin|MCUAtmosphereLED2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, MCU_LED_OUT_Pin|MCU_LED_OUTB6_Pin|RunningLED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PCPin PCPin */
@@ -95,6 +98,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(MCU_KEY_IN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PAPin PAPin */
+  GPIO_InitStruct.Pin = MCUAtmosphereLED1_Pin|MCUAtmosphereLED2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = GentleSensor_Pin;
@@ -111,7 +120,80 @@ void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 2 */
+void BSP_RUNNINGLED_ON(void)
+{
+  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,GPIO_PIN_RESET);
+}
 
+void BSP_RUNNINGLED_OFF(void)
+{
+  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,GPIO_PIN_SET);
+}
+
+void BSP_RUNNINGLED_TORGGLE(void)
+{
+  HAL_GPIO_TogglePin(RunningLED_GPIO_Port,RunningLED_Pin);
+}
+
+void BSP_COMMUNICATIONLED_ON(void)
+{
+  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,GPIO_PIN_RESET);
+}
+void BSP_COMMUNICATIONLED_OFF(void)
+{
+  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,GPIO_PIN_SET);
+}
+void BSP_COMMUNICATIONLED_TORGGLE(void)
+{
+  HAL_GPIO_TogglePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin);
+}
+
+/***************************************************************************/
+void BSP_ATMOSPHERELED1_ON(void)
+{
+  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,GPIO_PIN_SET);
+}
+void BSP_ATMOSPHERELED1_OFF(void)
+{
+  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,GPIO_PIN_RESET);
+}
+void BSP_ATMOSPHERELED1_TOGGLE(void)
+{
+  HAL_GPIO_TogglePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin);
+}
+
+void BSP_ATMOSPHERELED2_ON(void)
+{
+  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,GPIO_PIN_SET); 
+}
+void BSP_ATMOSPHERELED2_OFF(void)
+{
+  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,GPIO_PIN_RESET);	 
+}
+void BSP_ATMOSPHERELED2_TOGGLE(void)
+{
+  HAL_GPIO_TogglePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin);	 
+}
+/***************************************************************************/
+void BSP_LED_OUT_OFF(void)
+{
+  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,GPIO_PIN_RESET);
+}
+
+void BSP_LED_OUT_ON(void)
+{
+  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,GPIO_PIN_SET);
+}
+
+/*************************************************************************/
+void BSP_FAN_OUT_OFF(void)
+{
+  
+}
+void BSP_FAN_OUT_ON(void)
+{
+  
+}
 /* USER CODE END 2 */
 
 /**
