@@ -56,6 +56,50 @@
   #include "usart.h"
   #include "stm32f1xx_hal.h"  
   
+  #define DS_RX_LEN         2048   
+  #define DS_DATA_LEN       1024
+     
+     
+  /*******************************************************************************
+  ** enum: DS_StatusTypeDef
+  **
+  ** DESCRIPTION:
+  **  --«˝∂Ø∞Â¿‡–Õ
+  **
+  ** CREATED: 2017/12/7, by bert
+  **
+  ** FILE: DS_Protocol.h
+  **
+  ** AUTHOR: Bert.Zhang
+  ********************************************************************************
+  */
+     typedef enum
+     {
+       BSP_OK       = 0x00U,
+       BSP_ERROR    = 0x01U,
+       BSP_BUSY     = 0x02U,
+       BSP_TIMEOUT  = 0x03U   
+     }DS_StatusTypeDef;
+  /*******************************************************************************
+  ** struct: sUsartReciveType
+  **
+  ** DESCRIPTION:
+  **  --
+  **
+  ** CREATED: 2017/12/7, by Bert
+  **
+  ** FILE: DS_Protocol.h
+  **
+  ** AUTHOR: Bert.Zhang
+  ********************************************************************************
+  */
+  struct sUsartReciveType
+  {
+    uint8_t     RX_Flag:1;
+    uint16_t    RX_Size;
+    uint8_t     RX_pData[DS_RX_LEN];
+  };  
+   
   /*******************************************************************************
   ** struct: sProtocolCmd
   **

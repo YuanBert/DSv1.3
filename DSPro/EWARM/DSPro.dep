@@ -206,6 +206,7 @@
             <file>$PROJ_DIR$\..\Src\GentleSensor.c</file>
             <file>$PROJ_DIR$\DSPro\Obj\DS_Protocol.o</file>
             <file>$PROJ_DIR$\DSPro\Obj\DS_Protocol.pbi</file>
+            <file>$PROJ_DIR$\..\..\..\..\AppData\Local\IAR Embedded Workbench\CodeTemplates.ENU.txt</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
@@ -1127,7 +1128,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 86 11 21 3 43 26 10 0 28 1 15 16 18 89 12 27 2 9 19 29 83 69 30 17 5 79 8 4 111 63 48 58 31 25 66 88 197 127</file>
+                    <file> 15 3 1 16 111 43 26 11 10 0 86 21 18 28 12 27 2 9 19 29 83 69 30 17 5 79 8 4 89 63 48 58 31 25 66 88 197 127</file>
                 </tool>
             </inputs>
         </file>

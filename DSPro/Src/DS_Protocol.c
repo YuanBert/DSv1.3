@@ -48,6 +48,10 @@
   /* Includes ------------------------------------------------------------------*/
 #include "DS_Protocol.h"
 
+uint8_t DataBuffer[DS_DATA_LEN];
+
+
+
   /**
     * @}
     */
