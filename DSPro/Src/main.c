@@ -49,6 +49,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f1xx_hal.h"
+#include "crc.h"
 #include "dma.h"
 #include "tim.h"
 #include "usart.h"
@@ -116,6 +117,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM4_Init();
   MX_TIM5_Init();
+  MX_CRC_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();

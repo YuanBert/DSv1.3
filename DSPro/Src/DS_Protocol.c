@@ -49,7 +49,7 @@
 #include "DS_Protocol.h"
 #include "usart.h"
 
-uint8_t AckCmdBuffer[4];
+uint8_t AckCmdBuffer[5];
 uint8_t CortexA9CmdDataBuffer[DS_CMD_LEN + DS_DATA_LEN];
 uint8_t DoorBoardCmdDataBuffer[DS_CMD_LEN + DS_DATA_LEN];
 
