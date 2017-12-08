@@ -232,7 +232,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             gCortexA9ProtocolCmd.RevDataCnt++;
             if(gCortexA9ProtocolCmd.DataLength == gCortexA9ProtocolCmd.RevDataCnt)
             {
-              if(0x53 != *(CortexA9UsartType.RX_pData + 5 + gCortexA9ProtocolCmd.RevDataCnt))
+              if(0x53 != *(CortexA9UsartType.RX_pData + 6 + gCortexA9ProtocolCmd.RevDataCnt))
               {
                 gCortexA9ProtocolCmd.RevDataCnt = 0;
                 gCortexA9ProtocolCmd.DataLength = 0;
@@ -253,7 +253,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             return state;
           }
           
-          if(0xA0 ==(*(CortexA9UsartType.RX_pData + 1) & 0xAF) && 0x53 == *(CortexA9UsartType.RX_pData + 3))
+          if(0xA0 ==(*(CortexA9UsartType.RX_pData + 1) & 0xF0) && 0x53 == *(CortexA9UsartType.RX_pData + 4))
           {
               gCortexA9ProtocolCmd.AckCmdCode   = *(CortexA9UsartType.RX_pData + 1);
               gCortexA9ProtocolCmd.AckCode      = *(CortexA9UsartType.RX_pData + 2);
@@ -270,12 +270,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
           
           if(0 == gCortexA9ProtocolCmd.DataLength)
           {
-            if(0x53 != *(CortexA9UsartType.RX_pData + 5))
+            if(0x53 != *(CortexA9UsartType.RX_pData + 6))
             {
               return state;
             }
             gCortexA9ProtocolCmd.RevRequestFlag = 1;
-            gCortexA9ProtocolCmd.TotalLength = 5;
+            gCortexA9ProtocolCmd.TotalLength = 6;
             return state;
           }
           
@@ -285,7 +285,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             gCortexA9ProtocolCmd.RevDataCnt++;
             if(gCortexA9ProtocolCmd.DataLength == gCortexA9ProtocolCmd.RevDataCnt)
             {
-              if(0x53 != *(CortexA9UsartType.RX_pData + 5 + gCortexA9ProtocolCmd.RevDataCnt))
+              if(0x53 != *(CortexA9UsartType.RX_pData + 6 + gCortexA9ProtocolCmd.RevDataCnt))
               {
                 gCortexA9ProtocolCmd.RevDataCnt = 0;
                 gCortexA9ProtocolCmd.DataLength = 0;
@@ -293,7 +293,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
                 return state;
               }
               gCortexA9ProtocolCmd.RevRequestFlag = 1;
-              gCortexA9ProtocolCmd.TotalLength = 5 + gCortexA9ProtocolCmd.DataLength;
+              gCortexA9ProtocolCmd.TotalLength = 6 + gCortexA9ProtocolCmd.DataLength;
               return state;
             } 
           }
@@ -327,7 +327,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             gDoorBoardProtocolCmd.RevDataCnt++;
             if(gDoorBoardProtocolCmd.DataLength == gDoorBoardProtocolCmd.RevDataCnt)
             {
-              if(0x53 != *(DoorBoardUsartType.RX_pData + 5 + gDoorBoardProtocolCmd.RevDataCnt))
+              if(0x53 != *(DoorBoardUsartType.RX_pData + 6 + gDoorBoardProtocolCmd.RevDataCnt))
               {
                 gDoorBoardProtocolCmd.RevDataCnt = 0;
                 gDoorBoardProtocolCmd.DataLength = 0;
@@ -348,7 +348,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             return state;
           }
           
-          if(0xA0 ==(*(DoorBoardUsartType.RX_pData + 1) & 0xAF) && 0x53 == *(DoorBoardUsartType.RX_pData + 3))
+          if(0xA0 ==(*(DoorBoardUsartType.RX_pData + 1) & 0xAF) && 0x53 == *(DoorBoardUsartType.RX_pData + 4))
           {
               gDoorBoardProtocolCmd.AckCmdCode   = *(DoorBoardUsartType.RX_pData + 1);
               gDoorBoardProtocolCmd.AckCode      = *(DoorBoardUsartType.RX_pData + 2);
@@ -365,12 +365,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
           
           if(0 == gDoorBoardProtocolCmd.DataLength)
           {
-            if(0x53 != *(DoorBoardUsartType.RX_pData + 5))
+            if(0x53 != *(DoorBoardUsartType.RX_pData + 6))
             {
               return state;
             }
             gDoorBoardProtocolCmd.RevRequestFlag = 1;
-            gDoorBoardProtocolCmd.TotalLength = 5;
+            gDoorBoardProtocolCmd.TotalLength = 6;
             return state;
           }
           
@@ -380,7 +380,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             gDoorBoardProtocolCmd.RevDataCnt++;
             if(gDoorBoardProtocolCmd.DataLength == gDoorBoardProtocolCmd.RevDataCnt)
             {
-              if(0x53 != *(DoorBoardUsartType.RX_pData + 5 + gDoorBoardProtocolCmd.RevDataCnt))
+              if(0x53 != *(DoorBoardUsartType.RX_pData + 6 + gDoorBoardProtocolCmd.RevDataCnt))
               {
                 gDoorBoardProtocolCmd.RevDataCnt = 0;
                 gDoorBoardProtocolCmd.DataLength = 0;
@@ -388,7 +388,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
                 return state;
               }
               gDoorBoardProtocolCmd.RevRequestFlag = 1;
-              gDoorBoardProtocolCmd.TotalLength = 5 + gDoorBoardProtocolCmd.DataLength;
+              gDoorBoardProtocolCmd.TotalLength = 6 + gDoorBoardProtocolCmd.DataLength;
               return state;
             } 
           }
@@ -414,8 +414,13 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
       default: state = DS_NOCMD; break;
       }
       
-      pRequestCmd->HandingFlag = 0;
-      pRequestCmd->RevRequestFlag = 0;
+      pRequestCmd->HandingFlag      = 0;
+      pRequestCmd->RevRequestFlag   = 0;
+      pRequestCmd->DataLength       = 0;
+      pRequestCmd->DataLengthHight  = 0;
+      pRequestCmd->DataLengthLow    = 0;
+      pRequestCmd->RevDataCnt       = 0;
+      pRequestCmd->TotalLength      = 0;
     }
     return state;
   }
@@ -435,8 +440,13 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
       default: state = DS_NOCMD; break;
       }
       
-      pRequestCmd->HandingFlag = 0;
-      pRequestCmd->RevRequestFlag = 0;
+      pRequestCmd->HandingFlag      = 0;
+      pRequestCmd->RevRequestFlag   = 0;
+      pRequestCmd->DataLength       = 0;
+      pRequestCmd->DataLengthHight  = 0;
+      pRequestCmd->DataLengthLow    = 0;
+      pRequestCmd->RevDataCnt       = 0;
+      pRequestCmd->TotalLength      = 0;
     }   
     return state;
   }
