@@ -57,13 +57,19 @@
 
 /* USER CODE BEGIN Includes */
 #include "GentleSensor.h"
+#include "DS_Protocol.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+extern USARTRECIVETYPE     CortexA9UsartType;
+extern USARTRECIVETYPE     DoorBoardUsartType;
 GPIOSTATUSDETECTION gGentleSensorStatusDetection;
+PROTOCOLCMD  gCortexA9ProtocolCmd;
+PROTOCOLCMD  gDoorBoardProtocolCmd;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -118,6 +124,11 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim4);
   HAL_TIM_Base_Start_IT(&htim5);
   
+  HAL_UART_Receive_DMA(&huart1,CortexA9UsartType.RX_pData,DS_RX_LEN);
+  HAL_UART_Receive_DMA(&huart2,DoorBoardUsartType.RX_pData,DS_RX_LEN);
+  
+  __HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
+  __HAL_UART_ENABLE_IT(&huart2,UART_IT_IDLE);
   
 
   /* USER CODE END 2 */
@@ -129,6 +140,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    DS_TrySend5TimesCmdToCortexA9(&gCortexA9ProtocolCmd);
+    DS_TrySend5TimesCmdToDoorBoard(&gDoorBoardProtocolCmd);
 
   }
   /* USER CODE END 3 */

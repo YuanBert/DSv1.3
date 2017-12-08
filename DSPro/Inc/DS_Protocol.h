@@ -56,8 +56,9 @@
   #include "usart.h"
   #include "stm32f1xx_hal.h"  
   
+  #define DS_CMD_LEN        5
   #define DS_RX_LEN         2048   
-  #define DS_DATA_LEN       1024
+  #define DS_DATA_LEN       2048
      
      
   /*******************************************************************************
@@ -75,10 +76,11 @@
   */
      typedef enum
      {
-       BSP_OK       = 0x00U,
-       BSP_ERROR    = 0x01U,
-       BSP_BUSY     = 0x02U,
-       BSP_TIMEOUT  = 0x03U   
+       DS_OK       = 0x00U,
+       DS_ERROR    = 0x01U,
+       DS_BUSY     = 0x02U,
+       DS_TIMEOUT  = 0x03U,
+       DS_NOCMD    = 0x04U
      }DS_StatusTypeDef;
   /*******************************************************************************
   ** struct: sUsartReciveType
@@ -121,20 +123,47 @@
     uint8_t     DataLengthHight;
     uint8_t     DataCRC8;
     uint8_t*    pDataBuffer;
+    uint16_t    DataLength;
+    uint16_t    TotalLength;
     
     uint8_t     HandingFlag;
     uint8_t     AckCmdCode;
     uint8_t     AckCode;
     
+    uint16_t    RevDataCnt;
+    uint8_t     RevOrSendFlag;
     uint8_t     RevRequestFlag;
     uint8_t     RevEchoFlag;
     uint8_t     SendTimesCnt;
   };
+
+  typedef struct sProtocolCmd       PROTOCOLCMD,        *pPROTOCOLCMD;
+  typedef struct sUsartReciveType   USARTRECIVETYPE,    *pUSARTRECIVETYPE;
+  
+  
+  
+  DS_StatusTypeDef DS_ProtocolInit(void);
+  DS_StatusTypeDef DS_SendDataToCortexA9(uint8_t *pData, uint16_t size,uint32_t Timeout);
+  DS_StatusTypeDef DS_SendDataToDoorBoard(uint8_t *pData, uint16_t size,uint32_t Timeout);
+  DS_StatusTypeDef DS_SendRequestCmdToCortexA9(pPROTOCOLCMD pRequestCmd);
+  DS_StatusTypeDef DS_SendRequestCmdToDoorBoard(pPROTOCOLCMD pRequestCmd);
+  
+  DS_StatusTypeDef DS_AckRequestCmdFromCortexA9(pPROTOCOLCMD pRequestCmd);
+  DS_StatusTypeDef DS_AckRequestCmdFromDoorBoard(pPROTOCOLCMD pRequestCmd);
+  
+  DS_StatusTypeDef DS_SendAckCmd(uint8_t AckCmd,uint8_t AckCode);
+  
+  DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void);
+  DS_StatusTypeDef DS_HandingUartDataFromDoorBoard(void);
+  DS_StatusTypeDef DS_HandingCmdFromCortexA9(pPROTOCOLCMD pRequestCmd);
+  DS_StatusTypeDef DS_HandingCmdFromDoorBoard(pPROTOCOLCMD pRequestCmd);
+  
+  DS_StatusTypeDef DS_TrySend5TimesCmdToCortexA9(pPROTOCOLCMD pRequestCmd);
+  DS_StatusTypeDef DS_TrySend5TimesCmdToDoorBoard(pPROTOCOLCMD pRequestCmd);
   
   
   #ifdef __cplusplus
   }
   #endif
   #endif
-  /***************************************************************END OF FILE****/
-
+  /*********************************************************END OF FILE*********/
