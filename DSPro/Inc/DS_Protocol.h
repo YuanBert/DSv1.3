@@ -56,6 +56,7 @@
   #include "usart.h"
   #include "stm32f1xx_hal.h"  
   
+  #define CRC_CCITT 0x1021
   #define DS_CMD_LEN        5
   #define DS_RX_LEN         2048   
   #define DS_DATA_LEN       2048
@@ -121,7 +122,7 @@
     uint8_t     CmdParam;
     uint8_t     DataLengthLow;
     uint8_t     DataLengthHight;
-    uint8_t     DataCRC8;
+    uint16_t    DataCRC16;
     uint8_t*    pDataBuffer;
     uint16_t    DataLength;
     uint16_t    TotalLength;
