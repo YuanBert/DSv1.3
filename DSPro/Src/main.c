@@ -132,6 +132,7 @@ int main(void)
   __HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
   __HAL_UART_ENABLE_IT(&huart2,UART_IT_IDLE);
   
+  DS_ProtocolInit();
 
   /* USER CODE END 2 */
 
@@ -142,6 +143,9 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    DS_HandingUartDataFromCortexA9();
+    DS_HandingCmdFromCortexA9(&gCortexA9ProtocolCmd);
+    
     DS_TrySend5TimesCmdToCortexA9(&gCortexA9ProtocolCmd);
     DS_TrySend5TimesCmdToDoorBoard(&gDoorBoardProtocolCmd);
 

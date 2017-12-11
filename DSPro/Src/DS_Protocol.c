@@ -49,7 +49,7 @@
 #include "DS_Protocol.h"
 #include "usart.h"
 
-uint8_t AckCmdBuffer[5];
+uint8_t AckCmdBuffer[5];                                    //return Request Cmd buffer
 uint8_t CortexA9CmdDataBuffer[DS_CMD_LEN + DS_DATA_LEN];
 uint8_t DoorBoardCmdDataBuffer[DS_CMD_LEN + DS_DATA_LEN];
 
@@ -60,6 +60,7 @@ extern UART_HandleTypeDef   huart2;
 
 USARTRECIVETYPE     CortexA9UsartType;
 USARTRECIVETYPE     DoorBoardUsartType;
+
 
 static DS_StatusTypeDef DS_SendRequestCmd(pPROTOCOLCMD pRequestCmd,uint8_t *pCmdDataBuffer)
 {
@@ -112,7 +113,8 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
     DS_StatusTypeDef state = DS_OK;
     CortexA9CmdDataBuffer[0] = 0x53;
     DoorBoardCmdDataBuffer[0] = 0x53;
-    
+    AckCmdBuffer[0] = 0x53;
+    AckCmdBuffer[4] = 0x53;
     
     return state;
   }
@@ -406,11 +408,31 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
     {
       switch(pRequestCmd->CmdType & 0xF0)
       {
-      case 0xB0:;break;
-      case 0xC0:;break;
-      case 0xD0:;break;
-      case 0xE0:;break;
-      case 0xF0:;break;
+      case 0xB0:pRequestCmd->AckCmdCode = 0xAB;
+                pRequestCmd->AckCode = 0x01;
+                DS_AckRequestCmdFromCortexA9(pRequestCmd);
+                break;
+                
+      case 0xC0:pRequestCmd->AckCmdCode = 0xAC;
+                pRequestCmd->AckCode = 0x01;
+                DS_AckRequestCmdFromCortexA9(pRequestCmd);
+                break;
+                
+      case 0xD0:pRequestCmd->AckCmdCode = 0xAD;
+                pRequestCmd->AckCode = 0x01;
+                DS_AckRequestCmdFromCortexA9(pRequestCmd);
+                break;
+                
+      case 0xE0:pRequestCmd->AckCmdCode = 0xAE;
+                pRequestCmd->AckCode = 0x01;
+                DS_AckRequestCmdFromCortexA9(pRequestCmd);
+                break;
+                
+      case 0xF0:pRequestCmd->AckCmdCode = 0xAF;
+                pRequestCmd->AckCode = 0x01;
+                DS_AckRequestCmdFromCortexA9(pRequestCmd);
+                break;
+                
       default: state = DS_NOCMD; break;
       }
       
@@ -454,6 +476,10 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
   DS_StatusTypeDef DS_AckRequestCmdFromCortexA9(pPROTOCOLCMD pRequestCmd)
   {
     DS_StatusTypeDef state = DS_OK;
+    AckCmdBuffer[1] = pRequestCmd->AckCmdCode;
+    AckCmdBuffer[2] = pRequestCmd->AckCode;
+    
+    state = DS_SendDataToCortexA9(AckCmdBuffer,5,0xFFFF);
     
     return state;
   }
@@ -461,6 +487,9 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
   DS_StatusTypeDef DS_AckRequestCmdFromDoorBoard(pPROTOCOLCMD pRequestCmd)
   {
     DS_StatusTypeDef state = DS_OK;
+    AckCmdBuffer[1] = pRequestCmd->AckCmdCode;
+    AckCmdBuffer[2] = pRequestCmd->AckCode;
+    state = DS_SendDataToDoorBoard(AckCmdBuffer,5,0xFFFF);
     
     return state;
   }
