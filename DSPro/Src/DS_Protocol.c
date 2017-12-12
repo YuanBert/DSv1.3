@@ -114,12 +114,12 @@ static DS_StatusTypeDef DS_SendRequestCmd(pPROTOCOLCMD pRequestCmd,uint8_t *pCmd
     DS_StatusTypeDef state = DS_OK;
     if(0 == pRequestCmd->HandingFlag)
     {
-      pRequestCmd->HandingFlag = 0;
+      pRequestCmd->HandingFlag = 1;
       *(pCmdDataBuffer + 1) = pRequestCmd->CmdType;
       *(pCmdDataBuffer + 2)= pRequestCmd->CmdParam;
       *(pCmdDataBuffer + 3)= pRequestCmd->DataLengthHight;
       *(pCmdDataBuffer + 4)= pRequestCmd->DataLengthLow;
-      dataLength = ((pRequestCmd->DataLengthHight) << 8) + pRequestCmd->DataLengthLow;
+      dataLength = pRequestCmd->DataLength;
       *(pCmdDataBuffer + REQUESTFIXEDCOMMANDLEN + dataLength - 1) = 0x5D;
       
       /* Calculate CRC */
@@ -190,6 +190,13 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
   DS_StatusTypeDef DS_SendRequestCmdToCortexA9(pPROTOCOLCMD pRequestCmd)
   {
       DS_StatusTypeDef state = DS_OK;
+      
+      /*  */
+      if(pRequestCmd->RevRequestFlag)
+      {
+        return state;
+      }
+      
       state = DS_SendRequestCmd(pRequestCmd,CortexA9CmdDataBuffer);
       
       return state;
@@ -198,6 +205,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
   DS_StatusTypeDef DS_SendRequestCmdToDoorBoard(pPROTOCOLCMD pRequestCmd)
   {
       DS_StatusTypeDef state = DS_OK;
+      
       state = DS_SendRequestCmd(pRequestCmd,DoorBoardCmdDataBuffer);
       return state;
   }
@@ -213,6 +221,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
         pRequestCmd->RevOrSendFlag  = 0;
         pRequestCmd->SendTimesCnt   = 0;
         pRequestCmd->RevEchoFlag    = 0;
+        pRequestCmd->RevRequestFlag   = 0;
+        pRequestCmd->DataLength       = 0;
+        pRequestCmd->DataLengthHight  = 0;
+        pRequestCmd->DataLengthLow    = 0;
+        pRequestCmd->RevDataCnt       = 0;
+        pRequestCmd->TotalLength      = 0;
       }
       else
       {
@@ -223,6 +237,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
           pRequestCmd->RevOrSendFlag = 0;
           pRequestCmd->SendTimesCnt = 0;
           pRequestCmd->RevEchoFlag = 0;
+          pRequestCmd->RevRequestFlag   = 0;
+          pRequestCmd->DataLength       = 0;
+          pRequestCmd->DataLengthHight  = 0;
+          pRequestCmd->DataLengthLow    = 0;
+          pRequestCmd->RevDataCnt       = 0;
+          pRequestCmd->TotalLength      = 0;
         }
         else
         {
@@ -245,6 +265,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
         pRequestCmd->RevOrSendFlag  = 0;
         pRequestCmd->SendTimesCnt   = 0;
         pRequestCmd->RevEchoFlag    = 0;
+        pRequestCmd->RevRequestFlag   = 0;
+        pRequestCmd->DataLength       = 0;
+        pRequestCmd->DataLengthHight  = 0;
+        pRequestCmd->DataLengthLow    = 0;
+        pRequestCmd->RevDataCnt       = 0;
+        pRequestCmd->TotalLength      = 0;
       }
       else
       {
@@ -255,6 +281,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
           pRequestCmd->RevOrSendFlag = 0;
           pRequestCmd->SendTimesCnt = 0;
           pRequestCmd->RevEchoFlag = 0;
+          pRequestCmd->RevRequestFlag   = 0;
+          pRequestCmd->DataLength       = 0;
+          pRequestCmd->DataLengthHight  = 0;
+          pRequestCmd->DataLengthLow    = 0;
+          pRequestCmd->RevDataCnt       = 0;
+          pRequestCmd->TotalLength      = 0;
         }
         else
         {
@@ -274,6 +306,10 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
     if(CortexA9UsartType.RX_Flag)
     {
       CortexA9UsartType.RX_Flag = 0;
+      if(gCortexA9ProtocolCmd.RevOrSendFlag)
+      {
+        return state;
+      }
       if(gCortexA9ProtocolCmd.RevRequestFlag)
       {
         //
@@ -359,9 +395,9 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             {
               if(0x5D != *(CortexA9UsartType.RX_pData + REQUESTFIXEDCOMMANDLEN + gCortexA9ProtocolCmd.RevDataCnt - 1))
               {
-                gCortexA9ProtocolCmd.RevDataCnt = 0;
-                gCortexA9ProtocolCmd.DataLength = 0;
-                gCortexA9ProtocolCmd.TotalLength = 0;
+                gCortexA9ProtocolCmd.RevDataCnt     = 0;
+                gCortexA9ProtocolCmd.DataLength     = 0;
+                gCortexA9ProtocolCmd.TotalLength    = 0;
                 return state;
               }
               gCortexA9ProtocolCmd.DataCRC16      = *(CortexA9UsartType.RX_pData + i + 1) << 8 + *(CortexA9UsartType.RX_pData + i + 2);
@@ -382,9 +418,12 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
     DS_StatusTypeDef state = DS_OK;
     //uint8_t temp;
     uint16_t i;
+    
+    /* Processing serial data */
     if(DoorBoardUsartType.RX_Flag)
     {
       DoorBoardUsartType.RX_Flag = 0;
+      /* Return if the previous command is not processed */
       if(gDoorBoardProtocolCmd.RevRequestFlag)
       {
         //
@@ -392,6 +431,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
       }
       else
       {
+        /* Handle the data in the command - Part2 */
         if(gDoorBoardProtocolCmd.RevDataCnt < gDoorBoardProtocolCmd.DataLength && 0 != gDoorBoardProtocolCmd.RevDataCnt)
         {
           for(i = 0; i < DoorBoardUsartType.RX_Size; i++)
@@ -400,13 +440,14 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             gDoorBoardProtocolCmd.RevDataCnt++;
             if(gDoorBoardProtocolCmd.DataLength == gDoorBoardProtocolCmd.RevDataCnt)
             {
-              if(0x5D != *(DoorBoardUsartType.RX_pData + i + 3))
+              if(0x5D != *(DoorBoardUsartType.RX_pData + i + 3)) // Corresponding CRC16
               {
                 gDoorBoardProtocolCmd.RevDataCnt    = 0;
                 gDoorBoardProtocolCmd.DataLength    = 0;
                 gDoorBoardProtocolCmd.TotalLength   = 0;
                 return state;
               }
+              /* If you modify the CRC inspection method,modify here */
               gDoorBoardProtocolCmd.DataCRC16       = *(DoorBoardUsartType.RX_pData + i + 1)<<8 + *(DoorBoardUsartType.RX_pData + i + 2);
               /* Here add to CRC16-CCITT inspection code */
               gDoorBoardProtocolCmd.RevRequestFlag  = 1;
@@ -459,10 +500,10 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             /*Here add to CRC16-CCITT inspection code */
             
             gDoorBoardProtocolCmd.RevRequestFlag = 1;
-            gDoorBoardProtocolCmd.TotalLength = 6;
+            gDoorBoardProtocolCmd.TotalLength = REQUESTFIXEDCOMMANDLEN;
             return state;
           }
-          
+          /* Handle the data in the command - Part1 */
           for(i = 5; i < DoorBoardUsartType.RX_Size; i++)
           {
             DoorBoardCmdDataBuffer[i] = *(DoorBoardUsartType.RX_pData + i);
@@ -471,14 +512,14 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
             {
               if(0x5D != *(DoorBoardUsartType.RX_pData + REQUESTFIXEDCOMMANDLEN + gDoorBoardProtocolCmd.RevDataCnt - 1))
               {
-                gDoorBoardProtocolCmd.RevDataCnt = 0;
-                gDoorBoardProtocolCmd.DataLength = 0;
-                gDoorBoardProtocolCmd.TotalLength = 0;
+                gDoorBoardProtocolCmd.RevDataCnt    = 0;
+                gDoorBoardProtocolCmd.DataLength    = 0;
+                gDoorBoardProtocolCmd.TotalLength   = 0;
                 return state;
               }
               gDoorBoardProtocolCmd.DataCRC16      = *(DoorBoardUsartType.RX_pData + i + 1)<<8 + *(DoorBoardUsartType.RX_pData + i + 2);
               gDoorBoardProtocolCmd.RevRequestFlag = 1;
-              gDoorBoardProtocolCmd.TotalLength = 6 + gDoorBoardProtocolCmd.DataLength;
+              gDoorBoardProtocolCmd.TotalLength = REQUESTFIXEDCOMMANDLEN + gDoorBoardProtocolCmd.DataLength;
               return state;
             } 
           }

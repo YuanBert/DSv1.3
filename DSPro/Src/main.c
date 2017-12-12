@@ -49,8 +49,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f1xx_hal.h"
+#include "adc.h"
 #include "crc.h"
 #include "dma.h"
+#include "i2c.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
@@ -70,6 +72,8 @@ extern USARTRECIVETYPE     DoorBoardUsartType;
 GPIOSTATUSDETECTION gGentleSensorStatusDetection;
 PROTOCOLCMD  gCortexA9ProtocolCmd;
 PROTOCOLCMD  gDoorBoardProtocolCmd;
+uint16_t    gTIM4Cnt;
+uint8_t     gTIM4CntFlag;
 
 /* USER CODE END PV */
 
@@ -118,6 +122,9 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_CRC_Init();
+  MX_ADC1_Init();
+  MX_UART4_Init();
+  MX_I2C2_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -143,11 +150,17 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+    DS_GentleSensorCheck();
+    
     DS_HandingUartDataFromCortexA9();
     DS_HandingCmdFromCortexA9(&gCortexA9ProtocolCmd);
     
-    DS_TrySend5TimesCmdToCortexA9(&gCortexA9ProtocolCmd);
-    DS_TrySend5TimesCmdToDoorBoard(&gDoorBoardProtocolCmd);
+    if(1 == gTIM4CntFlag)
+    {
+      DS_TrySend5TimesCmdToCortexA9(&gCortexA9ProtocolCmd);
+      DS_TrySend5TimesCmdToDoorBoard(&gDoorBoardProtocolCmd);
+      gTIM4CntFlag = 0;
+    }
 
   }
   /* USER CODE END 3 */
@@ -191,7 +204,8 @@ void SystemClock_Config(void)
     _Error_Handler(__FILE__, __LINE__);
   }
 
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADC|RCC_PERIPHCLK_USB;
+  PeriphClkInit.AdcClockSelection = RCC_ADCPCLK2_DIV6;
   PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
@@ -244,6 +258,21 @@ static void MX_NVIC_Init(void)
   /* DMA1_Channel7_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+  /* I2C2_EV_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(I2C2_EV_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
+  /* I2C2_ER_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(I2C2_ER_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(I2C2_ER_IRQn);
+  /* UART4_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(UART4_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(UART4_IRQn);
+  /* DMA2_Channel4_5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA2_Channel4_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA2_Channel4_5_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -259,11 +288,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* NOTE : This function Should not be modified, when the callback is needed,
             the __HAL_TIM_PeriodElapsedCallback could be implemented in the user file
    */
+  /* 1ms */
   if(htim->Instance == htim4.Instance)
   {
-    
+    gTIM4Cnt++;
+    if(gTIM4Cnt > 300)
+    {
+      gTIM4CntFlag = 1;
+      gTIM4Cnt = 0;
+    }
   }
-  
+  /* 0.1ms */
   if(htim->Instance == htim5.Instance)
   {
       gGentleSensorStatusDetection.GpioCurrentReadVal = HAL_GPIO_ReadPin(GentleSensor_GPIO_Port,GentleSensor_Pin);
@@ -273,7 +308,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         if(0 == gGentleSensorStatusDetection.GpioCarFlag)
         {
           gGentleSensorStatusDetection.GpioFilterCnt ++;
-          if(gGentleSensorStatusDetection.GpioFilterCnt > 5 && 0 == gGentleSensorStatusDetection.GpioStatusVal)
+          if(gGentleSensorStatusDetection.GpioFilterCnt > 20 && 0 == gGentleSensorStatusDetection.GpioStatusVal)
           {
             gGentleSensorStatusDetection.GpioStatusVal = 1;
             gGentleSensorStatusDetection.GpioFilterCnt = 0;
@@ -283,9 +318,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       }
       else
       {
-        gGentleSensorStatusDetection.GpioCarFlag = 0;
-        gGentleSensorStatusDetection.GpioFilterCnt = 0;
-        gGentleSensorStatusDetection.GpioStatusVal = 0;
+        gGentleSensorStatusDetection.GpioCarFlag       = 0;
+        gGentleSensorStatusDetection.GpioFilterCnt     = 0;
+        gGentleSensorStatusDetection.GpioStatusVal     = 0;
+        gGentleSensorStatusDetection.GpioSendDataFlag  = 1;
       }     
       gGentleSensorStatusDetection.GpioLastReadVal = gGentleSensorStatusDetection.GpioCurrentReadVal;
   }

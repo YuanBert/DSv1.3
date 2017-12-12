@@ -29,6 +29,7 @@ struct sGpioStatusDetection
   uint8_t   GpioFilterCnt;
   uint8_t   GpioStatusVal;
   uint8_t   GpioCarFlag;
+  uint8_t   GpioSendDataFlag;
 };
 
 typedef struct sGpioStatusDetection  GPIOSTATUSDETECTION, *pGPIOSTATUSDETECTION;
@@ -36,6 +37,7 @@ typedef struct sGpioStatusDetection  GPIOSTATUSDETECTION, *pGPIOSTATUSDETECTION;
 
 
 DS_StatusTypeDef    DS_GentleSensorCheck(void);
+DS_StatusTypeDef    DS_GentleSensorReleaseCheck(void);
 
 
 #ifdef __cplusplus

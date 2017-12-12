@@ -85,7 +85,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOA, MCUAtmosphereLED1_Pin|MCUAtmosphereLED2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, MCU_LED_OUT_Pin|MCU_LED_OUTB6_Pin|RunningLED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, MCU_FAN_OUT_Pin|MCU_LED_OUT_Pin|RunningLED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PCPin PCPin */
   GPIO_InitStruct.Pin = CommunicationLED_Pin|CTR485_EN_Pin;
@@ -112,7 +112,7 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GentleSensor_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = MCU_LED_OUT_Pin|MCU_LED_OUTB6_Pin|RunningLED_Pin;
+  GPIO_InitStruct.Pin = MCU_FAN_OUT_Pin|MCU_LED_OUT_Pin|RunningLED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

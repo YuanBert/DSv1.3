@@ -109,7 +109,16 @@
 							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_usb.c</name>
 						</file>
 						<file>
+							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c</name>
+						</file>
+						<file>
+							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c</name>
+						</file>
+						<file>
 							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_crc.c</name>
+						</file>
+						<file>
+							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c</name>
 						</file>
 						<file>
 							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c</name>
@@ -168,11 +177,19 @@
                                 </file>
 
                                 <file>
+                                 <name>..\Src\adc.c</name>
+                                </file>
+
+                                <file>
                                  <name>..\Src\crc.c</name>
                                 </file>
 
                                 <file>
                                  <name>..\Src\dma.c</name>
+                                </file>
+
+                                <file>
+                                 <name>..\Src\i2c.c</name>
                                 </file>
 
                                 <file>

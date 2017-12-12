@@ -47,11 +47,49 @@
   */
   /* Includes ------------------------------------------------------------------*/
 #include "GentleSensor.h"
-    
+
+extern GPIOSTATUSDETECTION gGentleSensorStatusDetection;
+extern PROTOCOLCMD  gCortexA9ProtocolCmd;
+extern PROTOCOLCMD  gDoorBoardProtocolCmd;
 DS_StatusTypeDef    DS_GentleSensorCheck(void)
 {
   DS_StatusTypeDef state = DS_OK;
+  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
+  {
+    /* if the vehcile is still ,carry out the release operation */
+  }
   
+  if(gGentleSensorStatusDetection.GpioStatusVal && gGentleSensorStatusDetection.GpioSendDataFlag)
+  {
+    gCortexA9ProtocolCmd.CmdType    = 0xB1;
+    gCortexA9ProtocolCmd.CmdParam   = 0x01;
+    gCortexA9ProtocolCmd.DataLength = 0x0000;
+    gCortexA9ProtocolCmd.DataLengthLow    = 0x00;
+    gCortexA9ProtocolCmd.DataLengthHight  = 0x00;
+    state = DS_SendRequestCmdToCortexA9(&gCortexA9ProtocolCmd);
+    
+    gGentleSensorStatusDetection.GpioSendDataFlag = 0;
+  }
+  
+  
+  return state;
+}
+
+DS_StatusTypeDef    DS_GentleSensorReleaseCheck(void)
+{
+  DS_StatusTypeDef state = DS_OK;
+  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
+  {
+    /* if the vehcile is still ,carry out the release operation */
+    
+    
+  }
+  else
+  {
+    /* if the vehicle is not in, give up the releases operation,and return the relevant code*/
+    
+    state = DS_ERROR;
+  }
   
   return state;
 }

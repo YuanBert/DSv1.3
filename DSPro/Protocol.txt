@@ -21,7 +21,10 @@ AckCmd:
 AckCmd命令校验为： AckCmd + AckCode
 
 2.命令说明：
-
+0xB1 0x01:地感来车
+0xB2 0x01:放行
+ACK：0xAB 0x00:放行成功
+	 0xAB 0x01:放行失败，来车已离去
 
 附录：
 ------------------- CRC16-CCITT Table--------------------------
@@ -61,14 +64,13 @@ AckCmd命令校验为： AckCmd + AckCode
 查表法实现方式：
 unsigned short crc_ccitt(unsigned char *q, int len)
 {
-unsigned short crc = 0;
-
-while (len-- > 0)
-crc = ccitt_table[(crc >> 8 ^ *q++) & 0xff] ^ (crc << 8);
-return ~crc；
+	unsigned short crc = 0;
+	while (len-- > 0)
+	crc = ccitt_table[(crc >> 8 ^ *q++) & 0xff] ^ (crc << 8);
+	return ~crc；
 }
 
-DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
+  DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
   {
     DS_StatusTypeDef state = DS_OK;
     //uint8_t temp;
@@ -76,6 +78,10 @@ DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
     if(CortexA9UsartType.RX_Flag)
     {
       CortexA9UsartType.RX_Flag = 0;
+      if(gCortexA9ProtocolCmd.RevOrSendFlag)
+      {
+        return state;
+      }
       if(gCortexA9ProtocolCmd.RevRequestFlag)
       {
         //
@@ -88,7 +94,7 @@ DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
         {
           for(i = 0; i < CortexA9UsartType.RX_Size; i++)
           {
-            CortexA9CmdDataBuffer[4 + gCortexA9ProtocolCmd.RevDataCnt + i] = *(CortexA9UsartType.RX_pData + i);
+            CortexA9CmdDataBuffer[5 + gCortexA9ProtocolCmd.RevDataCnt + i] = *(CortexA9UsartType.RX_pData + i);
             gCortexA9ProtocolCmd.RevDataCnt++;
             if(gCortexA9ProtocolCmd.DataLength == gCortexA9ProtocolCmd.RevDataCnt)
             {
@@ -131,10 +137,10 @@ DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
           gCortexA9ProtocolCmd.DataLengthLow    = *(CortexA9UsartType.RX_pData + 4);    //Low byte in the back
           gCortexA9ProtocolCmd.DataLengthHight  = *(CortexA9UsartType.RX_pData + 3);    //high byte first
           
-          CortexA9CmdDataBuffer[0]              = gCortexA9ProtocolCmd.CmdType;
-          CortexA9CmdDataBuffer[1]              = gCortexA9ProtocolCmd.CmdParam;
-          CortexA9CmdDataBuffer[2]              = gCortexA9ProtocolCmd.DataLengthHight;
-          CortexA9CmdDataBuffer[3]              = gCortexA9ProtocolCmd.DataLengthLow;
+          CortexA9CmdDataBuffer[1]              = gCortexA9ProtocolCmd.CmdType;
+          CortexA9CmdDataBuffer[2]              = gCortexA9ProtocolCmd.CmdParam;
+          CortexA9CmdDataBuffer[3]              = gCortexA9ProtocolCmd.DataLengthHight;
+          CortexA9CmdDataBuffer[4]              = gCortexA9ProtocolCmd.DataLengthLow;
           
           gCortexA9ProtocolCmd.DataLength       = (gCortexA9ProtocolCmd.DataLengthHight << 8) +\
                                                    gCortexA9ProtocolCmd.DataLengthLow;
@@ -155,15 +161,15 @@ DS_StatusTypeDef DS_HandingUartDataFromCortexA9(void)
           /* Handle the data in the command - Part1 */
           for(i = 5; i < CortexA9UsartType.RX_Size; i++)
           {
-            CortexA9CmdDataBuffer[i - 1] = *(CortexA9UsartType.RX_pData + i);
+            CortexA9CmdDataBuffer[i] = *(CortexA9UsartType.RX_pData + i);
             gCortexA9ProtocolCmd.RevDataCnt++;
             if(gCortexA9ProtocolCmd.DataLength == gCortexA9ProtocolCmd.RevDataCnt)
             {
               if(0x5D != *(CortexA9UsartType.RX_pData + REQUESTFIXEDCOMMANDLEN + gCortexA9ProtocolCmd.RevDataCnt - 1))
               {
-                gCortexA9ProtocolCmd.RevDataCnt = 0;
-                gCortexA9ProtocolCmd.DataLength = 0;
-                gCortexA9ProtocolCmd.TotalLength = 0;
+                gCortexA9ProtocolCmd.RevDataCnt 	= 0;
+                gCortexA9ProtocolCmd.DataLength 	= 0;
+                gCortexA9ProtocolCmd.TotalLength 	= 0;
                 return state;
               }
               gCortexA9ProtocolCmd.DataCRC16      = *(CortexA9UsartType.RX_pData + i + 1) << 8 + *(CortexA9UsartType.RX_pData + i + 2);

@@ -61,6 +61,8 @@
 #define CommunicationLED_GPIO_Port GPIOC
 #define CTR485_EN_Pin GPIO_PIN_1
 #define CTR485_EN_GPIO_Port GPIOC
+#define PhotosensitiveSensor_Pin GPIO_PIN_2
+#define PhotosensitiveSensor_GPIO_Port GPIOC
 #define MCU_KEY_IN_Pin GPIO_PIN_1
 #define MCU_KEY_IN_GPIO_Port GPIOA
 #define MCU_KEY_IN_EXTI_IRQn EXTI1_IRQn
@@ -78,10 +80,14 @@
 #define CortexA9_TX_GPIO_Port GPIOA
 #define CortexA9_RX_Pin GPIO_PIN_10
 #define CortexA9_RX_GPIO_Port GPIOA
-#define MCU_LED_OUT_Pin GPIO_PIN_5
+#define Speaker_TX_Pin GPIO_PIN_10
+#define Speaker_TX_GPIO_Port GPIOC
+#define Speaker_RX_Pin GPIO_PIN_11
+#define Speaker_RX_GPIO_Port GPIOC
+#define MCU_FAN_OUT_Pin GPIO_PIN_5
+#define MCU_FAN_OUT_GPIO_Port GPIOB
+#define MCU_LED_OUT_Pin GPIO_PIN_6
 #define MCU_LED_OUT_GPIO_Port GPIOB
-#define MCU_LED_OUTB6_Pin GPIO_PIN_6
-#define MCU_LED_OUTB6_GPIO_Port GPIOB
 #define RunningLED_Pin GPIO_PIN_9
 #define RunningLED_GPIO_Port GPIOB
 

@@ -1,11 +1,15 @@
 ﻿C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\DSPro.pbd
+C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\adc.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\crc.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\dma.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\DS_Protocol.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\GentleSensor.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\gpio.pbi
+C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\i2c.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\main.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal.pbi
+C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_adc.pbi
+C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_adc_ex.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_cortex.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_crc.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_dma.pbi
@@ -13,6 +17,7 @@ C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_flash.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_flash_ex.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_gpio.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_gpio_ex.pbi
+C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_i2c.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_msp.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_pcd.pbi
 C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\DSPro\Obj\stm32f1xx_hal_pcd_ex.pbi
