@@ -47,7 +47,14 @@
   */
   /* Includes ------------------------------------------------------------------*/
 #include "GentleSensor.h"
-
+    
+DS_StatusTypeDef    DS_GentleSensorCheck(void)
+{
+  DS_StatusTypeDef state = DS_OK;
+  
+  
+  return state;
+}
   /**
     * @}
     */

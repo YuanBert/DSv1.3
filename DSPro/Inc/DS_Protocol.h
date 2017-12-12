@@ -56,11 +56,11 @@
   #include "usart.h"
   #include "stm32f1xx_hal.h"  
   
-  #define CRC_CCITT 0x1021
-  #define DS_CMD_LEN        5
-  #define DS_RX_LEN         2048   
-  #define DS_DATA_LEN       2048
-     
+  #define DS_CMD_LEN                    5
+  #define DS_RX_LEN                     2048   
+  #define DS_DATA_LEN                   2048
+  #define REQUESTFIXEDCOMMANDLEN        8       //Header + CmdType + CmdParam + DataLength + CRC16 + End
+  #define ACKFIXEDCOMMANDLEN            6       //Header + AckCmdCode + AckCode + CRC16  + End
      
   /*******************************************************************************
   ** enum: DS_StatusTypeDef
@@ -130,6 +130,7 @@
     uint8_t     HandingFlag;
     uint8_t     AckCmdCode;
     uint8_t     AckCode;
+    uint16_t    AckCRC16CITT;
     
     uint16_t    RevDataCnt;
     uint8_t     RevOrSendFlag;

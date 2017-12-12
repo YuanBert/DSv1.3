@@ -6,6 +6,7 @@
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "DS_Protocol.h"
 #include "stm32f1xx_hal.h"
 
 /*******************************************************************************
@@ -31,6 +32,11 @@ struct sGpioStatusDetection
 };
 
 typedef struct sGpioStatusDetection  GPIOSTATUSDETECTION, *pGPIOSTATUSDETECTION;
+
+
+
+DS_StatusTypeDef    DS_GentleSensorCheck(void);
+
 
 #ifdef __cplusplus
 }
