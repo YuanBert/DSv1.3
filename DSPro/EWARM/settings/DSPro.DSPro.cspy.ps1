@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.general.xcl" --backend -f "C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.general.xcl" --backend -f "E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\17657\Desktop\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.general.xcl" --debug_file=$debugfile --backend -f "E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro\EWARM\settings\DSPro.DSPro.driver.xcl" 
 }
