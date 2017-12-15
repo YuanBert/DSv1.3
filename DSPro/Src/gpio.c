@@ -122,12 +122,12 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 2 */
 void BSP_RUNNINGLED_ON(void)
 {
-  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,RunningLED_ON);
 }
 
 void BSP_RUNNINGLED_OFF(void)
 {
-  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,GPIO_PIN_SET);
+  HAL_GPIO_WritePin(RunningLED_GPIO_Port, RunningLED_Pin,RunningLED_OFF);
 }
 
 void BSP_RUNNINGLED_TORGGLE(void)
@@ -137,11 +137,11 @@ void BSP_RUNNINGLED_TORGGLE(void)
 
 void BSP_COMMUNICATIONLED_ON(void)
 {
-  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,CommunicationLED_ON);
 }
 void BSP_COMMUNICATIONLED_OFF(void)
 {
-  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,GPIO_PIN_SET);
+  HAL_GPIO_WritePin(CommunicationLED_GPIO_Port, CommunicationLED_Pin,CommunicationLED_OFF);
 }
 void BSP_COMMUNICATIONLED_TORGGLE(void)
 {
@@ -151,11 +151,11 @@ void BSP_COMMUNICATIONLED_TORGGLE(void)
 /***************************************************************************/
 void BSP_ATMOSPHERELED1_ON(void)
 {
-  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,MCUAtmosphereLED1_ON);
 }
 void BSP_ATMOSPHERELED1_OFF(void)
 {
-  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(MCUAtmosphereLED1_GPIO_Port,MCUAtmosphereLED1_Pin,MCUAtmosphereLED1_OFF);
 }
 void BSP_ATMOSPHERELED1_TOGGLE(void)
 {
@@ -164,11 +164,11 @@ void BSP_ATMOSPHERELED1_TOGGLE(void)
 
 void BSP_ATMOSPHERELED2_ON(void)
 {
-  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,GPIO_PIN_SET); 
+  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,MCUAtmosphereLED2_ON); 
 }
 void BSP_ATMOSPHERELED2_OFF(void)
 {
-  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,GPIO_PIN_RESET);	 
+  HAL_GPIO_WritePin(MCUAtmosphereLED2_GPIO_Port,MCUAtmosphereLED2_Pin,MCUAtmosphereLED2_OFF);	 
 }
 void BSP_ATMOSPHERELED2_TOGGLE(void)
 {
@@ -177,22 +177,23 @@ void BSP_ATMOSPHERELED2_TOGGLE(void)
 /***************************************************************************/
 void BSP_LED_OUT_OFF(void)
 {
-  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,MCU_LED_OFF);
 }
 
 void BSP_LED_OUT_ON(void)
 {
-  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,GPIO_PIN_SET);
+  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,MCU_LED_ON);
 }
 
 /*************************************************************************/
 void BSP_FAN_OUT_OFF(void)
 {
+  HAL_GPIO_WritePin(MCU_FAN_OUT_GPIO_Port,MCU_FAN_OUT_Pin,MCU_FAN_OFF);
   
 }
 void BSP_FAN_OUT_ON(void)
 {
-  
+  HAL_GPIO_WritePin(MCU_LED_OUT_GPIO_Port,MCU_LED_OUT_Pin,MCU_FAN_ON);
 }
 /* USER CODE END 2 */
 

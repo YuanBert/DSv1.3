@@ -99,6 +99,18 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
+#define MCU_LED_ON                      GPIO_PIN_SET
+#define MCU_LED_OFF                     GPIO_PIN_RESET
+#define MCU_FAN_ON                      GPIO_PIN_SET
+#define MCU_FAN_OFF                     GPIO_PIN_RESET
+#define RunningLED_ON                   GPIO_PIN_SET
+#define RunningLED_OFF                  GPIO_PIN_RESET
+#define CommunicationLED_ON             GPIO_PIN_SET
+#define CommunicationLED_OFF            GPIO_PIN_RESET
+#define MCUAtmosphereLED1_ON            GPIO_PIN_SET
+#define MCUAtmosphereLED1_OFF           GPIO_PIN_RESET
+#define MCUAtmosphereLED2_ON            GPIO_PIN_SET
+#define MCUAtmosphereLED2_OFF           GPIO_PIN_RESET
 
 /* USER CODE END Private defines */
 

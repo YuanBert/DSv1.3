@@ -24,18 +24,20 @@
 */
 struct sGpioStatusDetection
 {
-  uint8_t   GpioCurrentReadVal;
-  uint8_t   GpioLastReadVal;
-  uint8_t   GpioFilterCnt;
-  uint8_t   GpioStatusVal;
-  uint8_t   GpioCarFlag;
-  uint8_t   GpioSendDataFlag;
-};
+  uint8_t   GpioCurrentReadVal;                 //Current GPIO value
+  uint8_t   GpioLastReadVal;                    //Last GPIO value
+  uint8_t   GpioFilterCnt;                      //Filter times
+  uint8_t   GpioStatusVal;                      //GPIO true logic state
+  uint8_t   GpioCarFlag;                        //vehicle is stilled Flag
+  uint8_t   GpioSendDataFlag;                   //Send data flag,it is zero if data been sent within asingle logic ,
+                                                //and set to one in the next logic
+  uint32_t  GpioValidLogicTimeCnt;              //Gpio vaild logic time counter
+};                                                                                                                      
 
 typedef struct sGpioStatusDetection  GPIOSTATUSDETECTION, *pGPIOSTATUSDETECTION;
 
 
-
+DS_StatusTypeDef    DS_GentleSensorInit(void);
 DS_StatusTypeDef    DS_GentleSensorCheck(void);
 DS_StatusTypeDef    DS_GentleSensorReleaseCheck(void);
 

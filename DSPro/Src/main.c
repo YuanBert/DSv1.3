@@ -139,7 +139,10 @@ int main(void)
   __HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
   __HAL_UART_ENABLE_IT(&huart2,UART_IT_IDLE);
   
+  DS_GentleSensorInit();
   DS_ProtocolInit();
+  
+  BSP_RUNNINGLED_ON();
 
   /* USER CODE END 2 */
 
@@ -297,6 +300,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       gTIM4CntFlag = 1;
       gTIM4Cnt = 0;
     }
+    
+    if(gGentleSensorStatusDetection.GpioValidLogicTimeCnt > 80)
+    {
+      gGentleSensorStatusDetection.GpioValidLogicTimeCnt--;
+    }
+    
   }
   /* 0.1ms */
   if(htim->Instance == htim5.Instance)

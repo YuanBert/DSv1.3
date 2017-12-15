@@ -1,7 +1,33 @@
+################################################################################
+##
+## This is an example file for defining your own code templates.
+##
+## The syntax for defining a code template is:
+## #TEMPLATE <template name>,<field>[=default value], <field>...
+##
+## The template name, the fields and their default values should be defined 
+## within quotes if they contain non-alphanumeric characters.
+## Use "&" in front of a letter in the template name to make the letter become 
+## a shortcut, which means that you can use ALT+<letter> to select the template 
+## or jump to the field in the dialog box.
+## Use ">" in the template to organize the template names in submenus.
+##
+################################################################################
+#TEMPLATE "&Statement>&if"
+if( %c )
+{
+  
+}
+#TEMPLATE &Statement>&for,"&End Value"=10,&Variable=i
+for(int %2 = 0; %2 < %1; ++%2)
+{
+  %c
+}
+#TEMPLATE &Statement>&Description
 /**
   ******************************************************************************
-  * File Name          : GentleSensor.c
-  * Description        : GentleSensor.c file
+  * File Name          : $FILE_FNAME$
+  * Description        : %c
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -46,90 +72,30 @@
   ******************************************************************************
   */
   /* Includes ------------------------------------------------------------------*/
-#include "GentleSensor.h"
-#include "gpio.h"
 
-extern GPIOSTATUSDETECTION gGentleSensorStatusDetection;
-extern PROTOCOLCMD  gCortexA9ProtocolCmd;
-extern PROTOCOLCMD  gDoorBoardProtocolCmd;
 
-DS_StatusTypeDef    DS_GentleSensorInit(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  
-  gGentleSensorStatusDetection.GpioValidLogicTimeCnt = 0;
-  
-  return state;
-}
-
-DS_StatusTypeDef    DS_GentleSensorCheck(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  
-  
-  if(0 == gGentleSensorStatusDetection.GpioCarFlag || gGentleSensorStatusDetection.GpioValidLogicTimeCnt < 100)
-  {
-    /* Turn off the flash if the car leaves or if the flash blinks longer than the set value */
-    BSP_LED_OUT_OFF();
-    
-  }
-  
-  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
-  {
-    /* if the vehcile is still ,carry out the release operation */
-    
-    
-    if(gGentleSensorStatusDetection.GpioValidLogicTimeCnt < 100)
-    {
-      /* Report vehicle timeout notification */
-    }
-    
-  }
-  
-  if(gGentleSensorStatusDetection.GpioStatusVal && gGentleSensorStatusDetection.GpioSendDataFlag)
-  {
-    gGentleSensorStatusDetection.GpioValidLogicTimeCnt = 90100;
-    /* Flash open*/
-    BSP_LED_OUT_ON();
-    
-    /* Report the arrival of car */
-    gCortexA9ProtocolCmd.CmdType    = 0xB1;
-    gCortexA9ProtocolCmd.CmdParam   = 0x01;
-    gCortexA9ProtocolCmd.DataLength = 0x0000;
-    gCortexA9ProtocolCmd.DataLengthLow    = 0x00;
-    gCortexA9ProtocolCmd.DataLengthHight  = 0x00;
-    state = DS_SendRequestCmdToCortexA9(&gCortexA9ProtocolCmd);
-    
-    gGentleSensorStatusDetection.GpioSendDataFlag = 0;
-  }
-  
-  
-  return state;
-}
-
-DS_StatusTypeDef    DS_GentleSensorReleaseCheck(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
-  {
-    /* if the vehcile is still ,carry out the release operation */
-    
-    
-  }
-  else
-  {
-    /* if the vehicle is not in, give up the releases operation,and return the relevant code*/
-    
-    state = DS_ERROR;
-  }
-  
-  return state;
-}
   /**
-    * @}
-    */
+  * @}
+  */
   /**
-    * @}
-    */
+  * @}
+  */
   /*****************************END OF FILE**************************************/
-
+#TEMPLATE &Corporate>&class,"Class &name",&Description=--,&Created="$DATE$, by $USER_NAME$"
+//******************
+// CLASS: %1
+//
+// DESCRIPTION:
+//  %2
+//
+// CREATED: %3
+//
+// FILE: $FILE_FNAME$
+//
+class %1
+{
+public:
+  %1();
+  ~%1();
+  %c
+};

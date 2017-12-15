@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * File Name          : GentleSensor.c
-  * Description        : GentleSensor.c file
+  * File Name          : DS_LED.c
+  * Description        : 
   ******************************************************************************
   * This notice applies to any and all portions of this file
   * that are not between comment pairs USER CODE BEGIN and
@@ -45,91 +45,17 @@
   *
   ******************************************************************************
   */
-  /* Includes ------------------------------------------------------------------*/
-#include "GentleSensor.h"
-#include "gpio.h"
+/* Includes ------------------------------------------------------------------*/
 
-extern GPIOSTATUSDETECTION gGentleSensorStatusDetection;
-extern PROTOCOLCMD  gCortexA9ProtocolCmd;
-extern PROTOCOLCMD  gDoorBoardProtocolCmd;
+#incude "DS_LED.h"
 
-DS_StatusTypeDef    DS_GentleSensorInit(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  
-  gGentleSensorStatusDetection.GpioValidLogicTimeCnt = 0;
-  
-  return state;
-}
-
-DS_StatusTypeDef    DS_GentleSensorCheck(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  
-  
-  if(0 == gGentleSensorStatusDetection.GpioCarFlag || gGentleSensorStatusDetection.GpioValidLogicTimeCnt < 100)
-  {
-    /* Turn off the flash if the car leaves or if the flash blinks longer than the set value */
-    BSP_LED_OUT_OFF();
-    
-  }
-  
-  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
-  {
-    /* if the vehcile is still ,carry out the release operation */
-    
-    
-    if(gGentleSensorStatusDetection.GpioValidLogicTimeCnt < 100)
-    {
-      /* Report vehicle timeout notification */
-    }
-    
-  }
-  
-  if(gGentleSensorStatusDetection.GpioStatusVal && gGentleSensorStatusDetection.GpioSendDataFlag)
-  {
-    gGentleSensorStatusDetection.GpioValidLogicTimeCnt = 90100;
-    /* Flash open*/
-    BSP_LED_OUT_ON();
-    
-    /* Report the arrival of car */
-    gCortexA9ProtocolCmd.CmdType    = 0xB1;
-    gCortexA9ProtocolCmd.CmdParam   = 0x01;
-    gCortexA9ProtocolCmd.DataLength = 0x0000;
-    gCortexA9ProtocolCmd.DataLengthLow    = 0x00;
-    gCortexA9ProtocolCmd.DataLengthHight  = 0x00;
-    state = DS_SendRequestCmdToCortexA9(&gCortexA9ProtocolCmd);
-    
-    gGentleSensorStatusDetection.GpioSendDataFlag = 0;
-  }
-  
-  
-  return state;
-}
-
-DS_StatusTypeDef    DS_GentleSensorReleaseCheck(void)
-{
-  DS_StatusTypeDef state = DS_OK;
-  if(0 == gGentleSensorStatusDetection.GpioSendDataFlag && gGentleSensorStatusDetection.GpioCarFlag)
-  {
-    /* if the vehcile is still ,carry out the release operation */
-    
-    
-  }
-  else
-  {
-    /* if the vehicle is not in, give up the releases operation,and return the relevant code*/
-    
-    state = DS_ERROR;
-  }
-  
-  return state;
-}
+/**
+* @}
+  */
   /**
-    * @}
-    */
-  /**
-    * @}
-    */
+  * @}
+  */
   /*****************************END OF FILE**************************************/
+
+
 
