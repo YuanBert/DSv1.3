@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
-<ProjectName>C:\Users\17657\Desktop\DSv1.3\DSPro\\DSPro</ProjectName>
+<ProjectName>E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro\\DSPro</ProjectName>
 <CMSIS>..\Drivers\CMSIS</CMSIS>
-<HAL_Driver>D:\Lib\STM32Cube_FW_F1_V1.6.0\Drivers\CMSIS</HAL_Driver>
+<HAL_Driver>C:\Users\bertz\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.0\Drivers\CMSIS</HAL_Driver>
 
 <Toolchain>EWARM</Toolchain>
 	<Toolversion>0</Toolversion>
@@ -121,6 +121,12 @@
 							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c</name>
 						</file>
 						<file>
+							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c</name>
+						</file>
+						<file>
+							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi_ex.c</name>
+						</file>
+						<file>
 							<name>../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c</name>
 						</file>
 						<file>
@@ -190,6 +196,10 @@
 
                                 <file>
                                  <name>..\Src\i2c.c</name>
+                                </file>
+
+                                <file>
+                                 <name>..\Src\spi.c</name>
                                 </file>
 
                                 <file>

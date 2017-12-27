@@ -53,6 +53,7 @@
 #include "crc.h"
 #include "dma.h"
 #include "i2c.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "usb_device.h"
@@ -72,6 +73,7 @@ extern USARTRECIVETYPE     DoorBoardUsartType;
 GPIOSTATUSDETECTION gGentleSensorStatusDetection;
 PROTOCOLCMD  gCortexA9ProtocolCmd;
 PROTOCOLCMD  gDoorBoardProtocolCmd;
+
 uint16_t    gTIM4Cnt;
 uint8_t     gTIM4CntFlag;
 
@@ -125,6 +127,7 @@ int main(void)
   MX_ADC1_Init();
   MX_UART4_Init();
   MX_I2C2_Init();
+  MX_SPI1_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -157,6 +160,11 @@ int main(void)
     
     DS_HandingUartDataFromCortexA9();
     DS_HandingCmdFromCortexA9(&gCortexA9ProtocolCmd);
+    
+    DS_HandingUartDataFromDoorBoard();
+    DS_HandingCmdFromDoorBoard(&gDoorBoardProtocolCmd);
+    
+    
     
     if(1 == gTIM4CntFlag)
     {
@@ -301,10 +309,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       gTIM4Cnt = 0;
     }
     
-    if(gGentleSensorStatusDetection.GpioValidLogicTimeCnt > 80)
-    {
-      gGentleSensorStatusDetection.GpioValidLogicTimeCnt--;
-    }
+//    if(gGentleSensorStatusDetection.GpioValidLogicTimeCnt > 80)
+//    {
+//      gGentleSensorStatusDetection.GpioValidLogicTimeCnt--;
+//    }
     
   }
   /* 0.1ms */
@@ -317,7 +325,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         if(0 == gGentleSensorStatusDetection.GpioCarFlag)
         {
           gGentleSensorStatusDetection.GpioFilterCnt ++;
-          if(gGentleSensorStatusDetection.GpioFilterCnt > 20 && 0 == gGentleSensorStatusDetection.GpioStatusVal)
+          if(gGentleSensorStatusDetection.GpioFilterCnt > 15 && 0 == gGentleSensorStatusDetection.GpioStatusVal)
           {
             gGentleSensorStatusDetection.GpioStatusVal = 1;
             gGentleSensorStatusDetection.GpioFilterCnt = 0;

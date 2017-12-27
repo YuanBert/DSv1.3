@@ -1,6 +1,6 @@
 Configuration	DSPro
 STM32CubeMX 	4.23.0
-Date	12/12/2017
+Date	12/25/2017
 MCU	STM32F103RCTx
 
 
@@ -12,6 +12,9 @@ I2C2	I2C	I2C2_SCL	PB10
 I2C2	I2C	I2C2_SDA	PB11
 RCC	Crystal/Ceramic Resonator	RCC_OSC_IN	PD0-OSC_IN
 RCC	Crystal/Ceramic Resonator	RCC_OSC_OUT	PD1-OSC_OUT
+SPI1	Full-Duplex Master	SPI1_MISO	PA6
+SPI1	Full-Duplex Master	SPI1_MOSI	PA7
+SPI1	Full-Duplex Master	SPI1_SCK	PA5
 SYS	Serial Wire	SYS_JTCK-SWCLK	PA14
 SYS	Serial Wire	SYS_JTMS-SWDIO	PA13
 SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
@@ -37,11 +40,15 @@ Pin Nb	PINs	FUNCTIONs	LABELs
 15	PA1	GPIO_EXTI1	MCU_KEY_IN
 16	PA2	USART2_TX	BSP_TX
 17	PA3	USART2_RX	BSP_RX
-21	PA5	GPIO_Output	MCUAtmosphereLED1
-22	PA6	GPIO_Output	MCUAtmosphereLED2
+21	PA5	SPI1_SCK	W25Q64-SCK
+22	PA6	SPI1_MISO	W25Q64_MISO
+23	PA7	SPI1_MOSI	W25Q64_MOSI
 24	PC4	GPIO_Input	GentleSensor
 29	PB10	I2C2_SCL	
 30	PB11	I2C2_SDA	
+33	PB12	GPIO_Output	MCUAtmosphereLED2
+34	PB13	GPIO_Output	MCUAtmosphereLED1
+37	PC6	GPIO_Output	MCU_DS18B20
 42	PA9	USART1_TX	CortexA9_TX
 43	PA10	USART1_RX	CortexA9_RX
 44	PA11	USB_DM	
@@ -60,7 +67,7 @@ SOFTWARE PROJECT
 
 Project Settings : 
 Project Name : DSPro
-Project Folder : C:\Users\17657\Desktop\DSv1.3\DSPro
+Project Folder : E:\Users\bertz\Documents\GitHub\DSv1.3\DSPro
 Toolchain / IDE : EWARM
 Firmware Package Name and Version : STM32Cube FW_F1 V1.6.0
 

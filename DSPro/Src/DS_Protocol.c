@@ -48,6 +48,7 @@
   /* Includes ------------------------------------------------------------------*/
 #include "DS_Protocol.h"
 #include "usart.h"
+#include "gpio.h"
 
 /* CRC16-CCITT */
 static unsigned short ccitt_table[256] = {
@@ -169,6 +170,8 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
     AckCmdBuffer[0] = 0x5B;
     AckCmdBuffer[5] = 0x5D;
     
+    HAL_GPIO_WritePin(CTR485_EN_GPIO_Port, CTR485_EN_Pin,GPIO_PIN_RESET);
+    
     return state;
   }
 
@@ -205,6 +208,11 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
   DS_StatusTypeDef DS_SendRequestCmdToDoorBoard(pPROTOCOLCMD pRequestCmd)
   {
       DS_StatusTypeDef state = DS_OK;
+      /* */
+      if(pRequestCmd->RevRequestFlag)
+      {
+        return state;
+      }
       
       state = DS_SendRequestCmd(pRequestCmd,DoorBoardCmdDataBuffer);
       return state;
@@ -538,7 +546,17 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
       switch(pRequestCmd->CmdType & 0xF0)
       {
       case 0xB0:pRequestCmd->AckCmdCode = 0xAB;
-                pRequestCmd->AckCode = 0x01;
+                pRequestCmd->AckCode = 0x00;
+                if(0xB2 == pRequestCmd->CmdType)
+                {
+                  gDoorBoardProtocolCmd.CmdParam = 0x01;
+                  gDoorBoardProtocolCmd.CmdType = 0XB2;
+                  gDoorBoardProtocolCmd.DataLengthHight = 0;
+                  gDoorBoardProtocolCmd.DataLengthLow = 0;
+                  gDoorBoardProtocolCmd.DataLength = 0;
+                  DS_SendRequestCmdToDoorBoard(&gDoorBoardProtocolCmd);
+                }
+                gDoorBoardProtocolCmd.CmdParam = 0xB2;
                 DS_AckRequestCmdFromCortexA9(pRequestCmd);
                 break;
                 
@@ -561,7 +579,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
                 pRequestCmd->AckCode = 0x01;
                 DS_AckRequestCmdFromCortexA9(pRequestCmd);
                 break;
-                
+      case 0xA0:;break;
       default: state = DS_NOCMD; break;
       }
       
@@ -588,6 +606,7 @@ void DS_DoorBoardUsartReceive_IDLE(UART_HandleTypeDef *huart)
       case 0xD0:;break;
       case 0xE0:;break;
       case 0xF0:;break;
+      case 0xA0:;break;
       default: state = DS_NOCMD; break;
       }
       
